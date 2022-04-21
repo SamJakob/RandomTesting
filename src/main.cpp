@@ -59,5 +59,58 @@ int main(int argc, const char** argv) {
     // 2048 bytes.
     printIntRangeHash(2048);
 
+    // Custom seed
+    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0')
+              // Print the value.
+              << XXH3_64bits_withSeed("Hello, world!", 13, 0x702)
+              // Switch back to decimal.
+              << std::dec
+              << " (with custom seed)"
+              << std::endl;
+
+    // Custom secret
+    uint8_t secret[XXH3_SECRET_SIZE_MIN] = {};
+    memset(secret, 0, XXH3_SECRET_SIZE_MIN);
+
+    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0')
+              // Print the value.
+              << XXH3_64bits_withSecret("Hello, world!", 13, secret, XXH3_SECRET_SIZE_MIN)
+              // Switch back to decimal.
+              << std::dec
+              << " (with null secret of min length)"
+              << std::endl;
+
+    // Custom secret and seed
+    memset(secret, 0, XXH3_SECRET_SIZE_MIN);
+    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0')
+              // Print the value.
+              << XXH3_64bits_withSecretandSeed("Hello, world!", 13, secret, XXH3_SECRET_SIZE_MIN, 0x702)
+              // Switch back to decimal.
+              << std::dec
+              << " (with null secret of min length and custom seed)"
+              << std::endl;
+
+    uint8_t bigPayload[2048];
+    for (size_t i = 0; i < 2048; i++) bigPayload[i] = i % 256;
+
+    // Custom seed (big payload)
+    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0')
+              // Print the value.
+              << XXH3_64bits_withSeed(bigPayload, 2048, 0x702)
+              // Switch back to decimal.
+              << std::dec
+              << " (with custom seed and big payload)"
+              << std::endl;
+
+    // Custom secret and seed (big payload)
+    memset(secret, 0, XXH3_SECRET_SIZE_MIN);
+    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0')
+              // Print the value.
+              << XXH3_64bits_withSecretandSeed(bigPayload, 2048, secret, XXH3_SECRET_SIZE_MIN, 0x702)
+              // Switch back to decimal.
+              << std::dec
+              << " (with null secret of min length and custom seed and big payload)"
+              << std::endl;
+
     return 0;
 }
